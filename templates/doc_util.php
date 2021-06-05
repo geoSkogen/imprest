@@ -72,7 +72,7 @@ class Doc_Util {
     //
     // replace w/ arguments but leave as fallbacks
     $style_slugs = [$slug];
-    $script_slugs = [$slug];
+    $script_slugs = ['main', $slug];
     // factor out into arguments
     $html_before_app = '';
     $html_after_app = '';

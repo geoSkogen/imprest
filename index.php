@@ -9,7 +9,7 @@ if (!class_exists('Doc_Util')) {
 
 $db_conn = new Imprest_DB_Conn('imprest');
 
-$doc_util = new Doc_Util('#','Imprest Test Page');
+$doc_util = new Doc_Util('#','');
 
 $html = $doc_util->assemble_html_doc( $_SERVER['REQUEST_URI'] );
 

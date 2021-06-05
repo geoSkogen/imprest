@@ -7,9 +7,9 @@ class Imprest_User {
   public $email;
   private $pword;
 
-  function __construct($uname,$db_client) {
+  function __construct($db_client) {
     $this->client = $db_client;
-    $result = $this->select_user($uname);
+    $result = $this->select($uname);
     if ($result) {
       $this->email = $result['email'];
       $this->uname = $uname;
@@ -19,14 +19,14 @@ class Imprest_User {
     }
   }
 
-  public function create_user($uname,$pword,$email) {
+  public function new($uname,$pword,$email) {
     $existing = false;
     $result = array('resp' => null, 'err' => null);
     //
-    $existing = $this->select_user($uname);
+    $existing = $this->select($uname);
     if ($existing) { $result['err'] = 2; }
     //
-    $existing = $this->select_user_by_prop('email',$email);
+    $existing = $this->select_by_prop('email',$email);
     if ($existing) { $result['err'] = 1; }
     //
     $sql = "INSERT INTO users (u_name,p_word,email) VALUES ('$uname','$pword','$email')";
@@ -40,7 +40,7 @@ class Imprest_User {
     return $result;
   }
 
-  public function select_user($uname) {
+  public function select($uname) {
     $result_arr = [];
     $sql = "SELECT * FROM users WHERE u_name = '{$uname}'";
     $resp = $this->client->query($sql);
@@ -50,7 +50,7 @@ class Imprest_User {
     return (count($result_arr)) ? $result_arr[0] : null;
   }
 
-  public function select_user_prop($user,$prop) {
+  public function select_prop($user,$prop) {
     $result_arr = [];
     $sql = "SELECT {$prop} FROM users WHERE u_name = '{$user}'";
     $resp = $this->client->query($sql);
@@ -60,7 +60,7 @@ class Imprest_User {
     return (count($result_arr)) ? $result_arr[0][$prop] : null;
   }
 
-  public function select_user_by_prop($key,$val) {
+  public function select_by_prop($key,$val) {
     $result_arr = [];
     $sql = "SELECT * FROM users WHERE {$key} = '{$val}'";
     $resp = $this->client->query($sql);
@@ -70,7 +70,7 @@ class Imprest_User {
     return (count($result_arr)) ? $result_arr[0] : null;
   }
 
-  public function edit_user($assoc) {
+  public function edit($assoc) {
     $sql = "UPDATE users SET ";
     $index = 0;
     foreach ($assoc as $key => $val) {

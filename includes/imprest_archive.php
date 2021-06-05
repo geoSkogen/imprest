@@ -32,10 +32,10 @@ class BOC_Archive {
     //$this->props = $props;
     $this->date_time = $now;;
     $this->client = $db_client;
-    $this->create();
+    $this->new();
   }
 
-  function create() {
+  function new() {
     $result = null;
     $prop_str = implode(',',$this->props);
     $vals_str = '';

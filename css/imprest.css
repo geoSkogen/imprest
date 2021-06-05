@@ -1,0 +1,3 @@
+#imprest::after {
+  content : "this element was dynamically rendered by ES6 and the content injected by a CSS pseudo selector";
+}

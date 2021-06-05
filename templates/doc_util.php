@@ -21,7 +21,7 @@ class Doc_Util {
     <meta http-equiv='X-UA-Compatible' content='IE=edge'/>
     <title>$title</title>
     <link rel='icon' href=$icon_uri' type='image/x-icon'/ >
-    <link rel='stylesheet' href='style/main.css'/>
+    <link rel='stylesheet' href='css/main.css'/>
 
     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>
 
@@ -76,14 +76,16 @@ class Doc_Util {
     // factor out into arguments
     $html_before_app = '';
     $html_after_app = '';
-    $footer_tags_arr = [];
+    $footer_tags_arr = [
+      $this->head_script( $script_slugs )
+    ];
     //
     $doc_head = $this->head_top( $this->icon_uri, $this->title );
     $doc_body = $this->body_main( $html_before_app, $html_after_app );
     $doc_foot = $this->body_bottom ( $footer_tags_arr );
 
     $style_tags = $this->head_style( $style_slugs );
-    $script_tags = $this->head_script( $script_slugs );
+    $script_tags = $this->head_script( [] );
 
     $html_head = $doc_head . $style_tags . $script_tags . '</head>';
 

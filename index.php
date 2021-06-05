@@ -3,8 +3,9 @@
 if (!class_exists('Imprest_DB_Conn')) {
   include_once 'includes/imprest_db_conn.php';
 }
-// head, body, html_doc
-include 'templates/doc_util.php';
+if (!class_exists('Doc_Util')) {
+  include_once 'templates/doc_util.php';
+}
 
 $db_conn = new Imprest_DB_Conn('imprest');
 

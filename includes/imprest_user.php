@@ -7,7 +7,7 @@ class Imprest_User {
   public $email;
   private $pword;
 
-  function __construct($db_client) {
+  public function __construct($db_client) {
     $this->client = $db_client;
     $result = $this->select($uname);
     if ($result) {
@@ -70,7 +70,7 @@ class Imprest_User {
     return (count($result_arr)) ? $result_arr[0] : null;
   }
 
-  public function edit($assoc) {
+  public function update($assoc) {
     $sql = "UPDATE users SET ";
     $index = 0;
     foreach ($assoc as $key => $val) {

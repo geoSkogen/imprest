@@ -16,26 +16,25 @@ class BOC_Archive {
 
   public $client;
 
-  function __construct($id,$usr,$type,$to,$msg,$mvrs_arr,$db_client) {
+  public function __construct($db_client) {
 
     $this->props = [
       'hex_index','author','post_type',
       'addressee','body','mvng_lines'
     ];
 
-    $now = date("Y-m-d H:i:s");
+    $this->date_time = date("Y-m-d H:i:s");
+    $this->client = $db_client;
+  }
+
+  public function new($id,$usr,$type,$to,$msg,$mvrs_arr,$db_client) {
+
     $movers = ( is_array($mvrs_arr) ) ? implode(',', $mvrs_arr) : $mvrs_arr;
     $args = [ $id, $usr, $type,$to, $msg, $movers ];
     for ($i = 0; $i < count($args); $i++) {
       $this->{$this->props[$i]} = $args[$i];
     }
     //$this->props = $props;
-    $this->date_time = $now;;
-    $this->client = $db_client;
-    $this->new();
-  }
-
-  function new() {
     $result = null;
     $prop_str = implode(',',$this->props);
     $vals_str = '';

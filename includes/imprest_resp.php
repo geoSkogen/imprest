@@ -35,18 +35,55 @@ class Imprest_Resp {
 
       case 'POST' :
 
+        switch($this->action_name) {
+
+          case 'new' :
+
+          case 'update' :
+
+          case 'destroy' :
+            if ($this->controller) {
+
+              $this->controller = $this->route_resource($this->resource_name);
+              // use query string id wih controller select method to populate edit fields as needed
+              $this->controller->{$this->action_name}($this->post_data);
+
+            }
+            break;
+          default :
+
+        } // end action switch
+        // end post case
         break;
+
       case 'GET' :
 
+        switch($this->action_name) {
+
+          case 'create' :
+            break;
+
+          case 'edit' :
+
+          case 'delete' :
+            if ($this->controller) {
+              $this->controller = $this->route_resource($this->resource_name);
+              // use query string id wih controller select method to populate edit fields;
+            }
+            break;
+          default :
+
+        } // end action switch
+        // end get case
         break;
       default :
 
-    }
+    }  // end method switch
 
     return $json;
   }
 
-  protected function route_controller($obj_name,$act_name) {
+  protected function route_resource($obj_name) {
 
     if (!class_exists('Imprest_DB_Conn')) {
       include_once 'imprest_db_conn.php';
@@ -58,13 +95,17 @@ class Imprest_Resp {
 
       case 'user' :
 
-        $this->controller = new Imprest_User($db_conn);
+        $controller = new Imprest_User($db_conn);
         break;
       case 'archive' :
-        break;
-      default :
-    }
 
+        $controller = new Imprest_Archive($db_conn);
+        break;
+
+      default :
+        $controller = null;
+    }
+    return $controller;
   }
 
 

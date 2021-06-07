@@ -21,7 +21,7 @@ class Imprest_Resp {
 
   protected function parse_resource($uri,$query_str) {
 
-    $json = '{}';
+    $json = '{"type":"null"}';
     $uri_arr = explode('/',$uri);
     $resource = ( !empty($uri_arr[count($uri_arr)-1]) ) ?
       $uri_arr[count($uri_arr)-1] : $uri_arr[count($uri_arr)-2];
@@ -107,6 +107,8 @@ class Imprest_Resp {
     }
     return $controller;
   }
+
+
 
 
 }

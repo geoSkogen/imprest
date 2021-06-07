@@ -2,26 +2,25 @@
 
 class Doc_Util {
 
-  protected $icon_url;
-  protected $title;
   protected $uri;
+  protected $domain;
 
-  public function __construct($icon_uri,$title) {
-    $this->icon_uri = $icon_uri;
-    $this->title = $title;
+  public function __construct($domain) {
     $this->uri = '';
+    $this->domain = $domain;
   }
 
 
-  protected function head_top($icon_uri,$title) {
+  protected function head_top() {
     return "<!DOCTYPE html>
     <html lang='en'>
     <head>
     <meta charset='UTF-8' name='viewport' content='width=device-width, initial-scale=1'>
     <meta http-equiv='X-UA-Compatible' content='IE=edge'/>
-    <title>$title</title>
-    <link rel='icon' href=$icon_uri' type='image/x-icon'/ >
-    <link rel='stylesheet' href='css/main.css'/>
+    <title></title>
+    <link rel='icon' href='#' type='image/x-icon'/ >
+
+    <link rel='stylesheet' href='/" . DOMAIN . "/css/main.css'/>
 
     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>
 
@@ -33,7 +32,8 @@ class Doc_Util {
   protected function head_script($slugs_arr) {
     $tag = '';
     foreach ($slugs_arr as $slug) {
-      $tag .= "<script type='application/javascript' src='lib/{$slug}.js' /></script>";
+      $slug = (!$slug) ? $this->domain : $slug;
+      $tag .= "<script type='application/javascript' src='/" . DOMAIN ."/lib/{$slug}.js' /></script>";
     }
     return $tag;
   }
@@ -42,7 +42,8 @@ class Doc_Util {
   protected function head_style ($slugs_arr) {
     $tag = '';
     foreach ($slugs_arr as $slug) {
-      $tag .= "<link rel='stylesheet' href='css/$slug.css' />";
+      $slug = (!$slug) ? $this->domain : $slug;
+      $tag .= "<link rel='stylesheet' href='/". DOMAIN ."/css/{$slug}.css' />";
     }
     return $tag;
   }
@@ -72,7 +73,7 @@ class Doc_Util {
     //
     // replace w/ arguments but leave as fallbacks
     $style_slugs = [$slug];
-    $script_slugs = ['main', $slug];
+    $script_slugs = ['main', 'http', $slug ];
     // factor out into arguments
     $html_before_app = '';
     $html_after_app = '';
@@ -80,7 +81,7 @@ class Doc_Util {
       $this->head_script( $script_slugs )
     ];
     //
-    $doc_head = $this->head_top( $this->icon_uri, $this->title );
+    $doc_head = $this->head_top();
     $doc_body = $this->body_main( $html_before_app, $html_after_app );
     $doc_foot = $this->body_bottom ( $footer_tags_arr );
 

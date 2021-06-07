@@ -9,17 +9,12 @@ class Imprest_User {
 
   public function __construct($db_client) {
     $this->client = $db_client;
-    $result = $this->select($uname);
-    if ($result) {
-      $this->email = $result['email'];
-      $this->uname = $uname;
-      $this->id = $result['id'];
-    } else {
-      $result = null;
-    }
   }
 
-  public function new($uname,$pword,$email) {
+  public function new($data) {
+    $uame = $data['uname'];
+    $pword = $data['pword'];
+    $email = $data['email'];
     $existing = false;
     $result = array('resp' => null, 'err' => null);
     //

@@ -27,7 +27,7 @@ class BOC_Archive {
     $this->client = $db_client;
   }
 
-  public function new($id,$usr,$type,$to,$msg,$mvrs_arr,$db_client) {
+  public function new($data) {
 
     $movers = ( is_array($mvrs_arr) ) ? implode(',', $mvrs_arr) : $mvrs_arr;
     $args = [ $id, $usr, $type,$to, $msg, $movers ];
@@ -40,6 +40,7 @@ class BOC_Archive {
     $vals_str = '';
     $prop_str .= ',date_time';
     foreach( $this->props as $prop ) {
+      $this->{$prop} = $data[$prop];
       $vals_str .= (array_search($prop,$this->props)) ? "," : "";
       $vals_str .= "'" . $this->{$prop} . "'";
     }

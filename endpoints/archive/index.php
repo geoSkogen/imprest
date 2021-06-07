@@ -1,17 +1,19 @@
-{
-  "title" : "imprest",
-  "table" : [
-    ["shell","div","geo-block-inner","ogGeo",""],
-    ["shell_script","script","application/ld+json","",""],
-    ["shell_map","div","","og-geo-map",""],
-    ["shell_cities","div","gb-cities","",""],
-    ["cities_title","div","gb-title","",""],
-    ["title_header","h2","","","California in Vancouver WA"],
-    ["cities_subheader","p","geo-subhead","","Commercial and Residential Landscaping Services in The Greater Vancouver Area"],
-    ["cities_geolineTop","h3","gb-cities-col","","Vancouver | Camas | Washougal | Felida | Salmon Creek | Mount Vista | Ridgefield"],
-    ["cities_geolineBottom","h3","gb-cities-col","",""],
-    ["shell_buttons","div","gb-buttons","",""],
-    ["buttons_linkTop","a","","https://boulderfallsinc.com/reviews/","Our Reviews"],
-    ["buttons_linkBottom","a","","https://boulderfallsinc.com/estimate/","Free Estimate"]
-  ]
+<?php
+
+if (!class_exists('Imprest_Rest')) {
+  include_once '../../includes/imprest_resp.php';
 }
+//
+$data = file_get_contents("php://input") ?
+  file_get_contents("php://input") : '';
+//
+$req = new Imprest_Resp(
+  $_SERVER['REQUEST_METHOD'],
+  $_SERVER['REQUEST_URI'],
+  $_SERVER['QUERY_STRING'],
+  json_decode( $data )
+);
+//
+print $req->json;
+
+?>

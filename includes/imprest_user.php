@@ -174,7 +174,7 @@ class Imprest_User {
     return $resp;
   }
 
-  public function destroy_user($uname) {
+  public function destroy($uname) {
 
   }
 }

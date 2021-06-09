@@ -11,7 +11,7 @@ $req = new Imprest_Resp(
   $_SERVER['REQUEST_METHOD'],
   $_SERVER['REQUEST_URI'],
   $_SERVER['QUERY_STRING'],
-  json_decode( $data )
+  json_decode( $data, true )
 );
 //
 print $req->json;

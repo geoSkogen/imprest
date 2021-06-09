@@ -26,8 +26,7 @@ class Imprest_Resp {
   }
 
   protected function parse_resource($uri,$query_str) {
-    //print('query_string<br/>');
-    //print($query_str . '<br/>');
+
     $json = '{"type":"null"}';
     $uri_arr = explode('/',$uri);
     array_pop($uri_arr);
@@ -38,9 +37,7 @@ class Imprest_Resp {
 
     $this->resource_name = ( !empty($obj_act_arr[1]) ) ? $obj_act_arr[1] : $obj_act_arr[0] ;
     $this->action_name = ( !empty($obj_act_arr[1]) ) ? $obj_act_arr[0] : '';
-    //print('resource name<br/>');
-    //print($this->resource_name);
-    //print('<br/>');
+
     switch($this->method) {
 
       case 'POST' :
@@ -56,7 +53,7 @@ class Imprest_Resp {
 
               $this->controller = $this->route_resource($this->resource_name);
               // use query string id wih controller select method to populate edit fields as needed
-              $this->controller->{$this->action_name}($this->post_data);
+              $resp = $this->controller->{$this->action_name}($this->post_data);
 
             }
             break;
@@ -82,14 +79,12 @@ class Imprest_Resp {
             }
             break;
           default :
-            //print('defaulted on action string<br/>');
+
             if (empty($this->action_name)) {
-              //print('defualt view action<br/>');
-              // read-only base-sresource
+
               if ($this->resource_name) {
                 $this->controller = $this->route_resource($this->resource_name);
-                // use query string id wih controller select method to populate edit fields;
-                //print($query_str . '<br/>');
+
                 $db_query = $this->controller->get($this->query_str);
                 $json = ($db_query) ? $db_query : $json;
               }
@@ -111,8 +106,7 @@ class Imprest_Resp {
     if (!class_exists('Imprest_DB_Conn')) {
       include_once 'imprest_db_conn.php';
     }
-  //  print('object name for this resource<br/>');
-  //  print($obj_name . '<br/>');
+
     $db_conn = new Imprest_DB_Conn('imprest');
 
     switch ($obj_name) {

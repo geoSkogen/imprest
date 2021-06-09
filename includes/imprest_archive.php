@@ -1,20 +1,6 @@
 <?php
 
-class BOC_Archive {
-
-  public $hex_index;
-  public $author;
-  public $date_time;
-  public $post_type;
-  public $addressee;
-  public $body;
-  public $mvng_lines;
-  public static $post_props = [
-    'hex_index','author',
-    'post_type','addressee','body','mvng_lines'
-  ];
-
-  public $client;
+class Imprest_Archive {
 
     public $hex_index;
     public $author;
@@ -24,6 +10,7 @@ class BOC_Archive {
     public $mvng_lines;
     public $date_time;
     private $client;
+    protected $props;
 
   public function __construct($db_client) {
 
@@ -38,13 +25,12 @@ class BOC_Archive {
 
   public function new($data) {
 
-    //$this->props = $props;
     $result = null;
     $prop_str = implode(',',$this->props);
     $vals_str = '';
     $prop_str .= ',date_time';
     foreach( $this->props as $prop ) {
-      $this->{$prop} = !empty($data[$prop]) : $data[$prop] : '';
+      $this->{$prop} = !empty($data[$prop]) ? $data[$prop] : '';
       $vals_str .= (array_search($prop,$this->props)) ? "," : "";
       $vals_str .= "'" . $this->{$prop} . "'";
     }
@@ -59,16 +45,134 @@ class BOC_Archive {
     return $result;
   }
 
+  public function get($query_str) {
+
+    $resp = [];
+
+    $query_obj = $this->parse_query_string($query_str);
+
+    if ( !empty($query_obj->contacts) && !empty($query_obj->id) ) {
+
+      if ($query_obj->contacts) {
+        $resp = $this->select_by_assoc( $id,'contacts' );
+      }
+    }
+    if ( empty($query_obj->contacts) ) {
+
+      if ( !empty($query_obj->id) ) {
+
+        $resp = $this->select_by_prop('id',$query_obj->id);
+
+      } else if ( !empty($query_obj->range) ){
+
+        if ( count(explode(',',$query_obj->range)===2) ) {
+
+          $resp = $this->select_by_range( $range_str );
+        }
+      }
+    }
+
+    return ($resp) ? json_encode($resp) : null;
+  }
 
   public function parse_query_string($query_str) {
+    //
     $query_arr = explode('&',$query_str);
     $keyval_arr = [];
     $query_obj =  new stdClass;
+    //
     foreach( $query_arr as $keyval_pair) {
+      //
       $keyval_arr = explode('=', $keyval_pair);
-      $query_obj->{$keyval_arr[0]} = $keyval_arr[1];
+      //
+      if ( !empty($keyval_arr[1]) ) {
+        $query_obj->{$keyval_arr[0]} = $keyval_arr[1];
+      }
     }
     return $query_obj;
+  }
+
+  public function parse_id_range($id_str) {
+
+    $result = new stdClass;
+    $id_arr = explode(',',$id_str);
+    if (intval($id_arr[0]) && intval($id_arr[1])) {
+      $result->top = $id_arr[1]+1;
+      $result->bottom = $id_arr[0]-1;
+    } else {
+      $result = null;
+    }
+    return $result;
+  }
+
+  public function select($id) {
+    $result_arr = [];
+    $sql = "SELECT * FROM archives WHERE id = '{$id}'";
+    $resp = $this->client->query($sql);
+    while ($row = mysqli_fetch_array($resp)) {
+      $result_arr[] = $row;
+    }
+    return (count($result_arr)) ? $result_arr[0] : null;
+  }
+
+  public function select_by_prop($key,$val) {
+    $result_arr = [];
+    $sql = "SELECT * FROM archives WHERE {$key} = '{$val}'";
+    $resp = $this->client->query($sql);
+    while ($row = mysqli_fetch_array($resp)) {
+      $result_arr[] = $row;
+    }
+    return (count($result_arr)) ? $result_arr[0] : null;
+  }
+
+  public function select_by_assoc($id) {
+    $rows = [];
+    $ids_arr = [];
+    $one = $this->select_by_prop('id',$id);
+    if ($one) {
+      if (!empty($one->contact_ids)) {
+        $ids_arr = explode(',',$one->contact_ids);
+        foreach( $ids_arr as $next_id) {
+          $n = $this->select_by_prop('id',$next_id);
+          if ($n) {
+            $rows[] = $n;
+          }
+        }
+      }
+    }
+    return $rows;
+  }
+
+  public function select_by_range($range_str) {
+    //
+    $range = $this->parse_id_range($range_str);
+    $result_arr = [];
+    if ($ange) {
+      $sql = "SELECT * FROM archives WHERE id > $range->bottom AND id < $range->top";
+      $resp = $this->client->query($sql);
+      //
+      while ($row = mysqli_fetch_array($resp)) {
+        $result_arr[] = $row;
+      }
+    }
+    return $result_arr;
+  }
+
+  public function update($assoc) {
+    $sql = "UPDATE archives SET ";
+    $index = 0;
+    foreach ($assoc as $key => $val) {
+       $sql .= ($index) ? "," : "";
+       $sql .= $key . "= '{$val}'";
+       $index++;
+    }
+    $sql .= " WHERE id = {$this->id}";
+    $resp = $this->client->query($sql);
+    return $resp;
+  }
+
+  public function destroy($uname) {
+
   }
 }
 

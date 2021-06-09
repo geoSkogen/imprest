@@ -39,6 +39,8 @@ class Imprest_User {
 
   public function get($query_str) {
 
+    $resp = [];
+
     $query_obj = $this->parse_query_string($query_str);
 
     if ( !empty($query_obj->contacts) && !empty($query_obj->id) ) {
@@ -74,7 +76,10 @@ class Imprest_User {
     foreach( $query_arr as $keyval_pair) {
       //
       $keyval_arr = explode('=', $keyval_pair);
-      $query_obj->{$keyval_arr[0]} = $keyval_arr[1];
+      //
+      if ( !empty($keyval_arr[1]) ) {
+        $query_obj->{$keyval_arr[0]} = $keyval_arr[1];
+      }
     }
     return $query_obj;
   }

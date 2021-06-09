@@ -16,6 +16,7 @@ class Imprest_DB_Conn {
         u_name text NOT NULL,
         p_word varchar(24) NOT NULL,
         email varchar(64) NOT NULL,
+        contact_ids varchar(128) NOT NULL,
         PRIMARY KEY(id)
       )";
     $this->columns['archives'] = "CREATE TABLE archives (

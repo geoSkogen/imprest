@@ -16,6 +16,15 @@ class BOC_Archive {
 
   public $client;
 
+    public $hex_index;
+    public $author;
+    public $post_type;
+    public $addressee;
+    public $body;
+    public $mvng_lines;
+    public $date_time;
+    private $client;
+
   public function __construct($db_client) {
 
     $this->props = [
@@ -29,18 +38,13 @@ class BOC_Archive {
 
   public function new($data) {
 
-    $movers = ( is_array($mvrs_arr) ) ? implode(',', $mvrs_arr) : $mvrs_arr;
-    $args = [ $id, $usr, $type,$to, $msg, $movers ];
-    for ($i = 0; $i < count($args); $i++) {
-      $this->{$this->props[$i]} = $args[$i];
-    }
     //$this->props = $props;
     $result = null;
     $prop_str = implode(',',$this->props);
     $vals_str = '';
     $prop_str .= ',date_time';
     foreach( $this->props as $prop ) {
-      $this->{$prop} = $data[$prop];
+      $this->{$prop} = !empty($data[$prop]) : $data[$prop] : '';
       $vals_str .= (array_search($prop,$this->props)) ? "," : "";
       $vals_str .= "'" . $this->{$prop} . "'";
     }
@@ -53,6 +57,18 @@ class BOC_Archive {
       //print_r($resp);
     }
     return $result;
+  }
+
+
+  public function parse_query_string($query_str) {
+    $query_arr = explode('&',$query_str);
+    $keyval_arr = [];
+    $query_obj =  new stdClass;
+    foreach( $query_arr as $keyval_pair) {
+      $keyval_arr = explode('=', $keyval_pair);
+      $query_obj->{$keyval_arr[0]} = $keyval_arr[1];
+    }
+    return $query_obj;
   }
 }
 

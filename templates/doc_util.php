@@ -68,8 +68,8 @@ class Doc_Util {
     $this->uri = $uri;
     //
     $uri_arr = explode('/',$uri);
-    $slug = $uri_arr[count($uri_arr)-1] ?
-      $uri_arr[count($uri_arr)-1] : $uri_arr[count($uri_arr)-2];
+    array_pop($uri_arr);
+    $slug = $uri_arr[count($uri_arr)-1];
     //
     // replace w/ arguments but leave as fallbacks
     $style_slugs = [$slug];

@@ -15,7 +15,7 @@ class Imprest_User {
 
   public function new($data) {
 
-    $uame = $data['u_name'];
+    $uname = $data['u_name'];
     $pword = $data['p_word'];
     $email = $data['email'];
     $existing = false;

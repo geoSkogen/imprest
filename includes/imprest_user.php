@@ -58,9 +58,9 @@ class Imprest_User {
 
       } else if ( !empty($query_obj->range) ){
 
-        if ( count(explode(',',$query_obj->range)===2) ) {
+        if ( count(explode(':',$query_obj->range))===2) {
 
-          $resp = $this->select_by_range( $range_str );
+          $resp = $this->select_by_range( $query_obj->range );
         }
       }
     }
@@ -88,10 +88,19 @@ class Imprest_User {
   public function parse_id_range($id_str) {
 
     $result = new stdClass;
-    $id_arr = explode(',',$id_str);
-    if (intval($id_arr[0]) && intval($id_arr[1])) {
-      $result->top = $id_arr[1]+1;
-      $result->bottom = $id_arr[0]-1;
+    $id_arr = explode(':',$id_str);
+    //
+    if (!empty($id_arr[0]) && !empty($id_arr[1])
+        && intval($id_arr[0]) && intval($id_arr[1])) {
+      //
+      $result->top = intval($id_arr[1]+1);
+      $result->bottom = intval($id_arr[0]-1);
+      //
+    } else if (intval($id_arr[0]) && empty($id_arr[1])) {
+      //
+      $result->top = 0;
+      $result->bottom = intval($id_arr[0])-1;
+      //
     } else {
       $result = null;
     }
@@ -148,10 +157,12 @@ class Imprest_User {
 
   public function select_by_range($range_str) {
     //
-    $range = $this->parse_id_range($range_str);
     $result_arr = [];
-    if ($ange) {
-      $sql = "SELECT * FROM users WHERE id > $range->bottom AND id < $range->top";
+    $range = $this->parse_id_range($range_str);
+    //
+    if ($range) {
+      $sql = "SELECT * FROM users WHERE id > $range->bottom";
+      $sql .= ($range->top!=0) ?  " AND id < $range->top" : '';
       $resp = $this->client->query($sql);
       //
       while ($row = mysqli_fetch_array($resp)) {

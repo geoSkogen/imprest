@@ -16,7 +16,7 @@ if ( !empty($_POST) && count(array_keys($_POST)) ) {
   $data = json_decode($data, true);
 
 } else {
-  error_log('empty post object');
+  //error_log('empty post object');
 }
 //
 $req = new Imprest_Resp(

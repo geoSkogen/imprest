@@ -24,23 +24,25 @@ class Imprest_Archive {
   }
 
   public function new($data) {
-
+    //
     $result = null;
-    $prop_str = implode(',',$this->props);
     $vals_str = '';
+    $prop_str = implode(',',$this->props);
     $prop_str .= ',date_time';
+
     foreach( $this->props as $prop ) {
+      // build the CSV string of keys and values
       $this->{$prop} = !empty($data[$prop]) ? $data[$prop] : '';
       $vals_str .= (array_search($prop,$this->props)) ? "," : "";
       $vals_str .= "'" . $this->{$prop} . "'";
     }
+    // append the timespamp
     $vals_str.= ",'" . $this->date_time . "'";
     $sql = "INSERT INTO archives ($prop_str) VALUES ($vals_str)";
     $resp = $this->client->query($sql);
-    //print_r($sql);
+    //
     if ($resp) {
       $result =  $resp;
-      //print_r($resp);
     }
     return $result;
   }
@@ -65,9 +67,9 @@ class Imprest_Archive {
 
       } else if ( !empty($query_obj->range) ){
 
-        if ( count(explode(',',$query_obj->range)===2) ) {
+        if ( count(explode(':',$query_obj->range))===2) {
 
-          $resp = $this->select_by_range( $range_str );
+          $resp = $this->select_by_range( $query_obj->range );
         }
       }
     }
@@ -93,12 +95,20 @@ class Imprest_Archive {
   }
 
   public function parse_id_range($id_str) {
-
     $result = new stdClass;
-    $id_arr = explode(',',$id_str);
-    if (intval($id_arr[0]) && intval($id_arr[1])) {
-      $result->top = $id_arr[1]+1;
-      $result->bottom = $id_arr[0]-1;
+    $id_arr = explode(':',$id_str);
+    //
+    if (!empty($id_arr[0]) && !empty($id_arr[1])
+        && intval($id_arr[0]) && intval($id_arr[1])) {
+      //
+      $result->top = intval($id_arr[1]+1);
+      $result->bottom = intval($id_arr[0]-1);
+      //
+    } else if (intval($id_arr[0]) && empty($id_arr[1])) {
+      //
+      $result->top = 0;
+      $result->bottom = intval($id_arr[0])-1;
+      //
     } else {
       $result = null;
     }
@@ -145,10 +155,12 @@ class Imprest_Archive {
 
   public function select_by_range($range_str) {
     //
-    $range = $this->parse_id_range($range_str);
     $result_arr = [];
-    if ($ange) {
-      $sql = "SELECT * FROM archives WHERE id > $range->bottom AND id < $range->top";
+    $range = $this->parse_id_range($range_str);
+    //
+    if ($range) {
+      $sql = "SELECT * FROM archives WHERE id > $range->bottom";
+      $sql .= ($range->top!=0) ?  " AND id < $range->top" : '';
       $resp = $this->client->query($sql);
       //
       while ($row = mysqli_fetch_array($resp)) {

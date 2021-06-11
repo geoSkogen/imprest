@@ -1,6 +1,5 @@
 <?php
 //
-
 config_path();
 
 if (!class_exists('Imprest_DB_Conn')) {
@@ -18,7 +17,6 @@ $doc_util = new Doc_Util( DOMAIN );
 $html = $doc_util->assemble_html_doc( THIS_PATH );
 
 print $html;
-
 //
 
 //

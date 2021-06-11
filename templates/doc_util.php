@@ -29,11 +29,15 @@ class Doc_Util {
       crossorigin='anonymous'/>";
   }
 
-  protected function head_script($slugs_arr) {
+
+  protected function head_script($slugs_arr,$dir) {
     $tag = '';
+    $file = $dir==='json' ? $dir : 'js';
+    $type = $dir==='json' ? $dir : 'javascript';
+    
     foreach ($slugs_arr as $slug) {
       $slug = (!$slug) ? $this->domain : $slug;
-      $tag .= "<script type='application/javascript' src='/" . DOMAIN ."/lib/{$slug}.js' /></script>";
+      $tag .= "<script type='application/{$type}' src='/" . DOMAIN ."/{$dir}/{$slug}.{$file}' /></script>";
     }
     return $tag;
   }
@@ -52,6 +56,7 @@ class Doc_Util {
   protected function body_main($before,$after) {
     return "<body>$before<div id='app' ></div>$after</body>";
   }
+
 
   protected function body_bottom($tags) {
     $str = '';
@@ -78,7 +83,7 @@ class Doc_Util {
     $html_before_app = '';
     $html_after_app = '';
     $footer_tags_arr = [
-      $this->head_script( $script_slugs )
+      $this->head_script( $script_slugs, 'lib' )
     ];
     //
     $doc_head = $this->head_top();
@@ -86,7 +91,7 @@ class Doc_Util {
     $doc_foot = $this->body_bottom ( $footer_tags_arr );
 
     $style_tags = $this->head_style( $style_slugs );
-    $script_tags = $this->head_script( [] );
+    $script_tags = $this->head_script( [$slug], 'json' );
 
     $html_head = $doc_head . $style_tags . $script_tags . '</head>';
 

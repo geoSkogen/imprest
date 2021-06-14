@@ -1,19 +1,17 @@
 {
   "title" : "Imprest Test Pattern",
   "nest" : [
-["shell","div#og-geo.geo-block-inner{name:ham}()"],
+["shell","div#imprest-wrap.shell-outer{}()"],
 ["shell_script","script{plpml:script;type:application/javascript;src:@_imprestive}()"],
-["shell_map","div#og-geo-map.geo-block-innermost{}()"],
-["shell_cities","div#gb-cities.geo-block-innermost{}()"],
-["cities_title","div#gb-title.geo-block-innermost{}()"],
+["shell_imprest","div#imprest-shell.shell-inner{}()"],
+["imprest_title","div#imprest-title.shell-innermost{}()"],
 ["title_header","h2{plpml:header}(@_title_text)"],
-["cities_subheader","p#geo-subhead.geoline{plpml:header}(@_subheader)"],
-["cities_geolinetop","h3#gb-cities-top.gb-cities.citiesline{plpml:lines}(@_top_text)"],
-["cities_geolinebottom","h3#gb-cities-bottom.gb-cities.citiesline{plpml:lines}(@_bottom_text)"],
-["shell_buttons","div#gb-buttons{}()"],
+["title_subheader","p#imprest-subheader.subline{plpml:header}(@_subheader)"],
+["title_toptext","h3#imprest-text-top.textline{plpml:lines}(@_top_text)"],
+["title_bottomtext","h3#imprest-text-bottom.textline{plpml:lines}(@_bottom_text)"],
+["shell_buttons","div#imprest-buttons{}()"],
 ["buttons_linktop","a#linktop.buttonlink{plpml:buttons;href:@_top_href}(@_top_text)"],
-["buttons_br","br{}()"],
-["buttons_br","br{}()"],
+["buttons_linkmiddle","a#linkmiddle.buttonlink{plpml:buttons;href:@_middle_href}(@_middle_text)"],
 ["buttons_linkbottom","a#link-bottom.buttonlink{plpml:buttons;href:@_bottom_href}(@_bottom_text)"]
 ]
 }

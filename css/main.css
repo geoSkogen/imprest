@@ -1,0 +1,43 @@
+#imprest-shell, #imprest-buttons {
+  display:flex;
+  flex-flow: row wrap;
+  justify-content: center;
+}
+
+#imprest-title  h2{
+  opacity: 0.55;
+  font-family: Helvetica, Arial, sans-serif;
+  text-align: center;
+}
+
+#imprest-subheader {
+  color: cornflowerblue;
+  font-size: 22px;
+  font-family: Tahoma, Arial, sans-serif;
+  text-align: center;
+  font-weight: 300;
+  opacity: 0.55;
+}
+
+.textline {
+  font-size: 24px;
+  color: gainsboro;
+  font-weight: 800;
+  font-family: Helvetica, Arial, sans-serif;
+  text-align: center;s
+}
+
+a:link,a:active,a:hover,a:visited {
+  text-decoration: none;
+  color: white;
+}
+
+.buttonlink {
+  background-color: cornflowerblue;
+  color: white;
+  opacity: 0.77;
+  border-radius: 6px;
+  padding: 0.75em;
+  margin: 1em;
+  font-family: Tahoma, Arial, sans-serif;
+}

@@ -107,6 +107,15 @@ class Imprest_User {
     return $result;
   }
 
+  public function public_select($row_obj) {
+    $result = new stdClass;
+    //
+    $result->u_name = $row_obj->u_name;
+    $result->id = $row_obj->id;
+    $result->email = $row_obj->email;
+    return $result;
+  }
+
   public function select($uname) {
     $result_arr = [];
     $sql = "SELECT * FROM users WHERE u_name = '{$uname}'";

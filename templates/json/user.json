@@ -1,0 +1,6 @@
+{
+    ["shell","div.flexrow{}()"],
+    ["shell_list","ul#user-menu.biglist{}()"],
+    ["list_item","li#user.bigitem{plpml:data}( @_u_name )","n"]
+
+}

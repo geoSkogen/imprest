@@ -3,8 +3,8 @@
 class Imprest_DB_Conn {
 
   public $connection;
-  public $has_tables;
-  public $columns;
+  protected $has_tables;
+  protected $columns;
 
   function __construct($domain) {
     $results = [];
@@ -41,11 +41,11 @@ class Imprest_DB_Conn {
         $results[] = $this->query($this->columns[$table_name]);
       }
     }
-    //print_r($results);
+
     $this->has_tables = $results;
   }
 
-  public function config($domain) {
+  protected function config($domain) {
     $db_conn = array(
       'DB_USER'=>'root',
       'DB_PASSWORD'=>'',
@@ -59,7 +59,7 @@ class Imprest_DB_Conn {
     }
   }
 
-  public function db_conn() {
+  protected function db_conn() {
     $this->connection = new mysqli(DB_HOST,DB_USER,DB_PASSWORD,DB_NAME);
     if ($this->connection->connect_errno) {
       //print('db error');
@@ -70,7 +70,7 @@ class Imprest_DB_Conn {
     }
   }
 
-  public function escape_string($string) {
+  protected function escape_string($string) {
     $escaped_str = $this->connection->real_escape_string($string);
     return $escaped_str;
   }

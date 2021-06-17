@@ -1,12 +1,9 @@
-
-
-
 'use strict'
 
 const markup_table = [
     ["shell","div.flexrow{}()"],
     ["shell_list","ul#user-menu.biglist{}()"],
-    ["list_item","li#user.bigitem{plpml:data}( @_u_name )","n","data"]
+    ["list_item","li#user.bigitem{plpml:[n]}( @_u_name )","n","data"]
 ]
 
 const data_table = [
@@ -58,28 +55,13 @@ function parse_table_reiteration(markup_table, data_table) {
       } else {
 
         if (!row[3]) {
-          console.log('no data argument supplied for markup row--attempting string extraction')
-          let scope_slice = ( row[1].indexOf('plpml:') > -1 ) ?
-            row[1].slice( row[1].indexOf('plpml') ) : null
-
-          if (scope_slice) {
-            //
-             this_data_scope =
-              (scope_slice.indexOf(';')) ?
-              scope_slice(0, scope_slice.indexOf(';')) :
-              //
-              ( scope_slice.indexOf('}')) ?
-              scope_slice(0, scope_slice.indexOf('}')) :
-              null
-
-          } else {
-            console.log('no valid plpml attribute found')
-            these_reps = 0
-          }
+          console.log('no data argument supplied for markup row--defaulting to principal object')
+          this_data_scope = 'data'
         } else {
           console.log('using supplied scope for iteration')
           this_data_scope = row[3]
         }
+
       }
 
       if (this_data_scope) {
@@ -103,21 +85,22 @@ function parse_table_reiteration(markup_table, data_table) {
         let current_parent_iteration = repeating.el_handle_tally[handle_arr[0]]
         let new_parent_handle = handle_arr[0] + current_parent_iteration.toString()
 
-        repeating.el_handle_tally[handle_arr[0]]++
+        repeating.el_handle_tally[handle_arr[1]]++
         handle_arr[0] = new_parent_handle
       } else {
         console.log('no parent iterations')
       }
 
-      for (let i = 0; i < these_reps; i++) {
+      for (var i = 0; i < these_reps; i++) {
 
         let new_child_handle = handle_arr[1] + i.toString()
 
-        handle_arr[1] = new_child_handle
+        let new_handle = handle_arr[0] + '_' + new_child_handle
 
-        let new_handle = handle_arr[0] + '_' + handle_arr[1]
-
-        new_table.push( [ new_handle, row[1] ] )
+        var plpml_str = (row[1].indexOf('[n]') > -1) ?
+            row[1].replace( '[n]', i.toString() ) : row[1]
+        //
+        new_table.push( [ new_handle, plpml_str ] )
       }
     })
   }

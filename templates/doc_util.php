@@ -34,7 +34,7 @@ class Doc_Util {
     $tag = '';
     $file = $dir==='json' ? $dir : 'js';
     $type = $dir==='json' ? $dir : 'javascript';
-    
+
     foreach ($slugs_arr as $slug) {
       $slug = (!$slug) ? $this->domain : $slug;
       $tag .= "<script type='application/{$type}' src='/" . DOMAIN ."/{$dir}/{$slug}.{$file}' /></script>";
@@ -75,13 +75,14 @@ class Doc_Util {
     $uri_arr = explode('/',$uri);
     array_pop($uri_arr);
     $slug = $uri_arr[count($uri_arr)-1];
+    // factor out into arguments
+    $html_before_app = '';
+    $html_after_app = '';
     //
     // replace w/ arguments but leave as fallbacks
     $style_slugs = [$slug];
     $script_slugs = ['main', 'http', $slug ];
-    // factor out into arguments
-    $html_before_app = '';
-    $html_after_app = '';
+
     $footer_tags_arr = [
       $this->head_script( $script_slugs, 'lib' )
     ];
